@@ -1,0 +1,126 @@
+{
+  "Farg‘ona T": [
+    { "ism": "Xalimjon", "familiya": "Mominjonov", "tel": "+998903011999" },
+    { "ism": "Sherzod", "familiya": "Eminov", "tel": "+998905353880" },
+    { "ism": "Abduvohid", "familiya": "Ergashov", "tel": "+998904875209" },
+    { "ism": "Ilhomjon", "familiya": "Topvoldiyev", "tel": "+998975954619" },
+    { "ism": "Islomjon", "familiya": "Qo‘ziboyev", "tel": "+998911116151" }
+  ],
+  "Oltiariq": [
+    { "ism": "Azamat", "familiya": "G‘offurov", "tel": "+998911071556" },
+    { "ism": "Muxammadsidik", "familiya": "Sobirov", "tel": "+998333995599" },
+    { "ism": "Orifjon", "familiya": "Tojaliyev", "tel": "+998951284820" },
+    { "ism": "Nodirbek", "familiya": "Rustamov", "tel": "+998944480725" },
+    { "ism": "G‘anijon", "familiya": "Asqarov", "tel": "+998936619983" }
+  ],
+   "Quvasoy": [
+    { "ism": "Abdurahmon", "familiya": "Ibrohimov", "tel": "+998905842009" },
+    { "ism": "Anvarjon", "familiya": "Abdujabborov", "tel": "+998911111041" },
+    { "ism": "Sharifjonov", "familiya": "Sardorjon", "tel": "+998942242476" },
+    { "ism": "Boburjon", "familiya": "Madmusayev", "tel": "+998998694456" }
+  ], "Qo‘qon": [
+    { "ism": "Abdulloh", "familiya": "Abduqodirov", "tel": "+998917727565" },
+    { "ism": "Rahmonjon", "familiya": "Jamolov", "tel": "+998500775099" },
+    { "ism": "Zuxriddin", "familiya": "Zulfiqaxxorov", "tel": "+998903044059" },
+    { "ism": "Lazizjon", "familiya": "Avazxonov", "tel": "+998904585454" },
+    { "ism": "Ayubxon", "familiya": "Meliboyev", "tel": "+998916999895" }
+  ],
+  "Marg‘ilon": [
+    { "ism": "Ilyosxon", "familiya": "Xabibullayev", "tel": "+998334098220" },
+    { "ism": "Ubaydulloxon", "familiya": "Saydaxmedov", "tel": "+998931751957" },
+    { "ism": "Abdulvosid", "familiya": "Shukurov", "tel": "+998951580913" },
+    { "ism": "Tohirbek", "familiya": "Muxammadaliyev", "tel": "+998916704698" },
+    { "ism": "Abduraxim", "familiya": "Mo‘sojonov", "tel": "+998998990756" }
+  ],
+   "Quva": [
+    { "ism": "Shoxboz", "familiya": "Qodirov", "tel": "+998911246363" },
+    { "ism": "Axmadjon", "familiya": "Maxkamov", "tel": "+998903672728" },
+    { "ism": "Asadbek", "familiya": "Xolmatov", "tel": "+998942030933" },
+    { "ism": "Nuriddin", "familiya": "Isroilov", "tel": "+998903640460" },
+    { "ism": "Xurshidbek", "familiya": "Abduraxmonov", "tel": "+998911585708" }
+  ],
+  "Yozyovon": [
+    { "ism": "Kamollidin", "familiya": "To‘xtamatov", "tel": "+998937056541" },
+    { "ism": "Ro‘zimuhammad", "familiya": "Abdullaxatov", "tel": "+998911090490" },
+    { "ism": "Diyorbek", "familiya": "Abdullayev", "tel": "+998907781118" },
+    { "ism": "Temurbek", "familiya": "Madraximov", "tel": "+998916650330" },
+    { "ism": "Xurshidbek", "familiya": "Ergashev", "tel": "+998939661308" }
+  ],
+   "Toshloq": [
+    { "ism": "Sarvarjon", "familiya": "Sherboboyev", "tel": "+998992227252" },
+    { "ism": "Ulugbek", "familiya": "To‘lqinov", "tel": "+998913979746" },
+    { "ism": "Izzatillo", "familiya": "Mahmudov", "tel": "+998770201415" },
+    { "ism": "Nursulton", "familiya": "Erkaliyev", "tel": "+998940368939" },
+    { "ism": "Abubakir", "familiya": "G‘ulomov", "tel": "+998907802123" }
+  ], "Qo‘shtepa": [
+    { "ism": "Abdubannob", "Abduxamidov": "Abduxamidov", "tel": "+998911131014" },
+    { "ism": "Saidburxon", "familiya": "Solihonov", "tel": "+998931515001" },
+    { "ism": "Abrorbek", "familiya": "Yusupov", "tel": "+998330100800" },
+    { "ism": "Muxammaddiyorbek", "familiya": "Sultonov", "tel": "+998770209523" },
+    { "ism": "Aloxon", "familiya": "Ikromov", "tel": "+998937305030" }
+  ],
+  "Rishton": [
+    { "ism": "Ibrohimjon", "familiya": "Nosiraliyev", "tel": "+998911175920" },
+    { "ism": "Iqrorbek", "familiya": "Hoshimov", "tel": "+998935780601" },
+    { "ism": "Azizbek", "familiya": "Yoqubjonov", "tel": "+998908213001" },
+    { "ism": "Abbosbek", "familiya": "Nematov", "tel": "+998334000502" },
+    { "ism": "Alisher", "familiya": "Toshpulatov", "tel": "+998995993149" }
+  ],
+   "Bog‘dod": [
+    { "ism": "Shuhratjon", "familiya": "Ergashev", "tel": "+998900550900" },
+    { "ism": "Asatillo", "familiya": "Xasanboyev", "tel": "+998336762600" },
+    { "ism": "Shuhratjon", "familiya": "Abdullayev", "tel": "+998935565161" },
+    { "ism": "Dostonbek", "familiya": "Mirzamaxmudov", "tel": "+998997810600" }
+   
+  ], "Buvayda": [
+    { "ism": "Asatbek", "familiya": "O‘ktamov", "tel": "+998903442633" },
+    { "ism": "Javoxir", "familiya": "Oltmishboyev", "tel": "+998951531737" },
+    { "ism": "Javoxir", "familiya": "Xaydarov", "tel": "+998900682323" }
+  
+  ],
+  "So‘x": [
+    { "ism": "Parviz", "familiya": "Nasriddinov", "tel": "+998990063699" },
+    { "ism": "Izatillo", "familiya": "Hojiyev", "tel": "+998995911176" },
+    { "ism": "Islombek", "familiya": "Mahbubov", "tel": "+998998743699" },
+    { "ism": "Azizbek", "familiya": "Mexridinov", "tel": "+998998798142" },
+    { "ism": "Hasanjon", "familiya": "Olchinov", "tel": "+998774804240" }
+  ],
+   "Dang‘ara": [
+    { "ism": "Maxmudjon", "familiya": "Toxirov", "tel": "+998888170819" },
+    { "ism": "Davronbek", "familiya": "Xolmirzayev", "tel": "+998333152005" },
+    { "ism": "Mavlonjon", "familiya": "Saidov", "tel": "+998903651558" },
+    { "ism": "Azamadjon", "familiya": "Anvarov", "tel": "+998900570876" }
+    
+  ], "Beshariq": [
+    { "ism": "Diyorbek", "familiya": "Xabibxo‘jayev", "tel": "+998888148444" },
+    { "ism": "Abdulvosid", "familiya": "Abdujabborov", "tel": "+998973342000" },
+    { "ism": "Islomjon", "familiya": "Karimov", "tel": "+998937017313" },
+    { "ism": "Javohir", "familiya": "Azimjonov", "tel": "+998886612627" },
+    { "ism": "Rahmonjon", "familiya": "Oripov", "tel": "+998943992928" }
+  ],
+  "O‘zbekiston": [
+    { "ism": "Lazizjon", "familiya": "Azimov", "tel": "+998911104181" },
+    { "ism": "Behzod", "familiya": "Zafarjonov", "tel": "+998916843744" },
+    { "ism": "Odiljon", "familiya": "G‘ulomov", "tel": "+998917350860" },
+    { "ism": "Muhammadqodir", "familiya": "Tolibov", "tel": "+998931297399" },
+    { "ism": "Ulugbek", "familiya": "Marufjonov", "tel": "+998903905520" }
+  ],
+   "Furqat": [
+    { "ism": "Iqboljon", "familiya": "Yigitaliyev", "tel": "+998902939403" },
+    { "ism": "Alisher", "familiya": "Hoshimov", "tel": "+998772555459" },
+    { "ism": "Asadbek", "familiya": "Abdullayev", "tel": "+998505711098" },
+    { "ism": "Diyorjon", "familiya": "Eshonqulov", "tel": "+99816777406" },
+    { "ism": "Zaynobidin", "familiya": "Ikromov", "tel": "+998903640104" }
+  ], "Uchkoprik": [
+    { "ism": "Islombek", "familiya": "Jorayev", "tel": "+998901234572" },
+    { "ism": "Alisher", "familiya": "Muxammadaliyev", "tel": "+998901234573" },
+    { "ism": "Qobilbek", "familiya": "odilov", "tel": "+998901234574" }
+   
+  ], "Farg‘ona Sh": [
+    { "ism": "Jamshidbek", "familiya": "Abduqodirov", "tel": "+99899988825" },
+    { "ism": "Abduvohid", "familiya": "G‘ulomov", "tel": "+998954623333" },
+    { "ism": "Davronbek", "familiya": "Mirzahamidov", "tel": "+998951617307" },
+    { "ism": "Muhamadshukur", "familiya": "Abduolimov", "tel": "+998944353840" },
+    { "ism": "Islomjon", "familiya": "Azimjonov", "tel": "+998975556461" }
+  ]
+}

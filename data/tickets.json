@@ -1,0 +1,95 @@
+[
+  {
+    "ticketId": "002196",
+    "userId": 6030329675,
+    "groupId": -1001234567803,
+    "status": "open"
+  },
+  {
+    "ticketId": "126310",
+    "userId": 6030329675,
+    "groupId": -1003762304928,
+    "status": "open"
+  },
+  {
+    "ticketId": "167375",
+    "userId": 6030329675,
+    "groupId": -1003830518342,
+    "status": "open"
+  },
+  {
+    "ticketId": "840867",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "status": "open"
+  },
+  {
+    "ticketId": "293958",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "messageId": 16,
+    "status": "open"
+  },
+  {
+    "ticketId": "348139",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "messageId": 18,
+    "status": "closed"
+  },
+  {
+    "ticketId": "406241",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "messageId": 20,
+    "status": "closed"
+  },
+  {
+    "ticketId": "417543",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "messageId": 22,
+    "status": "closed"
+  },
+  {
+    "ticketId": "626658",
+    "userId": 6030329675,
+    "groupId": -1003874541804,
+    "status": "closed"
+  },
+  {
+    "ticketId": "726827",
+    "userId": "6030329675",
+    "groupId": "-1003874541804",
+    "status": "closed",
+    "createdAt": "2026-03-04T17:02:07.087Z"
+  },
+  {
+    "ticketId": "092362",
+    "userId": "6030329675",
+    "groupId": "-1003874541804",
+    "status": "closed",
+    "createdAt": "2026-03-04T17:08:12.530Z"
+  },
+  {
+    "ticketId": "270221",
+    "userId": "6030329675",
+    "groupId": "-1003874541804",
+    "status": "open",
+    "createdAt": "2026-03-04T17:11:10.382Z"
+  },
+  {
+    "ticketId": "372263",
+    "userId": "6030329675",
+    "groupId": "-1003874541804",
+    "status": "closed",
+    "createdAt": "2026-03-04T17:12:52.442Z"
+  },
+  {
+    "ticketId": "670133",
+    "userId": "6030329675",
+    "groupId": "-1003874541804",
+    "status": "open",
+    "createdAt": "2026-03-04T17:17:50.287Z"
+  }
+]
