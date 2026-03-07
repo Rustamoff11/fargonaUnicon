@@ -40,15 +40,24 @@ export async function saveUsers(users) {
 // USER olish
 export async function getUser(id) {
 
-  // SUPABASE dan olish
   if (supabase) {
-    const { data } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
+    try {
 
-    if (data) return data;
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Supabase getUser error:", error);
+      }
+
+      if (data) return data;
+
+    } catch (err) {
+      console.error("Supabase connection error:", err);
+    }
   }
 
   // JSON fallback
@@ -63,36 +72,43 @@ export async function saveUser(id, newData) {
 
   let user;
 
-  // SUPABASE ga yozish
   if (supabase) {
+    try {
 
-    const { data } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
+      const { data } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
 
-    if (!data) {
-      user = {
-        id,
-        createdAt: new Date().toISOString(),
-        active: false,
-        actions: [],
-        ...newData
-      };
+      if (!data) {
+        user = {
+          id,
+          createdAt: new Date().toISOString(),
+          active: false,
+          actions: [],
+          ...newData
+        };
+      } else {
+        user = { ...data, ...newData };
+      }
 
-    } else {
-      user = { ...data, ...newData };
+      const { error } = await supabase
+        .from("users")
+        .upsert({
+          ...user,
+          createdat: user.createdAt
+        });
+
+      if (error) {
+        console.error("Supabase saveUser error:", error);
+      }
+
+      return;
+
+    } catch (err) {
+      console.error("Supabase connection error:", err);
     }
-
-    await supabase
-      .from("users")
-      .upsert({
-        ...user,
-        createdat: user.createdAt // database bilan moslash
-      });
-
-    return;
   }
 
 
