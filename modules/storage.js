@@ -46,7 +46,7 @@ export async function getUser(id) {
       .from("users")
       .select("*")
       .eq("id", id)
-      .single();
+      .maybeSingle();
 
     if (data) return data;
   }
@@ -70,7 +70,7 @@ export async function saveUser(id, newData) {
       .from("users")
       .select("*")
       .eq("id", id)
-      .single();
+      .maybeSingle();
 
     if (!data) {
       user = {
@@ -81,17 +81,16 @@ export async function saveUser(id, newData) {
         ...newData
       };
 
-      await supabase.from("users").insert(user);
-
     } else {
-
       user = { ...data, ...newData };
-
-      await supabase
-        .from("users")
-        .update(user)
-        .eq("id", id);
     }
+
+    await supabase
+      .from("users")
+      .upsert({
+        ...user,
+        createdat: user.createdAt // database bilan moslash
+      });
 
     return;
   }
