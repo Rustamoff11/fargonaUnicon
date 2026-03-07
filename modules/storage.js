@@ -26,11 +26,14 @@ export async function saveUsers(users) {
 }
 
 export async function getUser(id) {
+  id = Number(id); // ID ni number qilish
   const users = await readUsers();
   return users.find(u => u.id === id);
 }
 
 export async function saveUser(id, newData) {
+  id = Number(id); // ID ni number qilish
+
   const users = await readUsers();
 
   let user = users.find(u => u.id === id);
