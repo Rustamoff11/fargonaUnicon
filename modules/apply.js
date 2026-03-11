@@ -7,7 +7,6 @@ import { DISTRICTS } from "../config.js";
 // employees.json o‘qish
 const employeesPath = path.resolve("data/employees.json");
 let employees = {};
-
 try {
   const data = fs.readFileSync(employeesPath, "utf8");
   employees = JSON.parse(data);
@@ -15,14 +14,9 @@ try {
   console.log("❌ employees.json topilmadi");
 }
 
-
-// =============================
 // managers.json o‘qish
-// =============================
-
 const managersPath = path.resolve("data/managers.json");
 let managers = {};
-
 try {
   const data = fs.readFileSync(managersPath, "utf8");
   managers = JSON.parse(data);
@@ -30,19 +24,32 @@ try {
   console.log("❌ managers.json topilmadi");
 }
 
-
 export default function applyModule(bot) {
 
   // =============================
-  // HUDUD TANLANGANDA
+  // "Murojaat yuborish" tugmasi bosilganda ishlaydigan handler
   // =============================
+  bot.action("START_REQUEST", async (ctx) => {
+    await ctx.answerCbQuery();
 
+    // Foydalanuvchini aktiv holatga o'tkazamiz
+    const user = await getUser(ctx.from.id);
+    if (!user || !user.district) {
+      return ctx.reply("❌ Iltimos, avval tumanni tanlang.");
+    }
+
+    await saveUser(ctx.from.id, { active: true });
+
+    await ctx.reply("✍️ Murojaatingizni yozing:");
+  });
+
+  // =============================
+  // Tuman tanlash (hodimlar ro‘yxati chiqarish)
+  // =============================
   bot.action(/APPLY_(.+)/, async (ctx) => {
-
     await ctx.answerCbQuery();
 
     const districtName = ctx.match[1];
-
     const district = DISTRICTS.find(d => d.name === districtName);
     if (!district) return ctx.reply("❌ Hudud topilmadi");
 
@@ -53,28 +60,20 @@ export default function applyModule(bot) {
     text += `👨‍💼 Mas'ul hodim: ${manager}\n\n`;
     text += `━━━━━━━━━━━━━━\n\n`;
 
-    if (districtEmployees.length === 0) {
-
+    if (!districtEmployees.length) {
       text += "❌ Hodimlar topilmadi\n";
-
     } else {
-
       districtEmployees.forEach(emp => {
-
         text += `👤 <b>${emp.ism} ${emp.familiya}</b>\n`;
         text += `📞 ${emp.tel}\n\n`;
-
       });
-
     }
 
     text += `━━━━━━━━━━━━━━\n`;
     text += `✍️ Murojaat yuborish uchun tugmani bosing`;
 
-    await saveUser(ctx.from.id, {
-      active: false,
-      district: district
-    });
+    // Foydalanuvchining tanlangan tumani saqlanadi, ammo murojaat yuborilmaydi
+    await saveUser(ctx.from.id, { district: district, active: false });
 
     await ctx.reply(
       text,
@@ -85,60 +84,30 @@ export default function applyModule(bot) {
         ])
       }
     );
-
   });
 
-
   // =============================
-  // MUROJAAT BOSHLASH
+  // Suhbatni yakunlash
   // =============================
-
-  bot.action("START_REQUEST", async (ctx) => {
-
-    await ctx.answerCbQuery();
-
-    await saveUser(ctx.from.id, {
-      active: true
-    });
-
-    await ctx.reply("✍️ Murojaatingizni yozing:");
-
-  });
-
-
-  // =============================
-  // SUHBATNI TUGATISH
-  // =============================
-
   bot.action("END_CHAT", async (ctx) => {
-
     await ctx.answerCbQuery();
 
-    await saveUser(ctx.from.id, {
-      active: false
-    });
+    await saveUser(ctx.from.id, { active: false });
 
     await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
 
     await ctx.reply("🔚 Suhbat tugatildi.\n/start bilan qayta boshlang.");
-
   });
 
-
   // =============================
-  // USER MESSAGE
+  // User xabarlarini qabul qilish
   // =============================
-
   bot.on("message", async (ctx) => {
-
     if (ctx.message.text?.startsWith("/")) return;
 
-    // ================= PRIVATE =================
-
     if (ctx.chat.type === "private") {
-
       const user = await getUser(ctx.from.id);
-      if (!user || !user.active) return;
+      if (!user || !user.active) return; // faqat active foydalanuvchi murojaat yuboradi
 
       if (!user.district || !user.district.groupId) {
         console.log("❌ groupId topilmadi");
@@ -146,7 +115,6 @@ export default function applyModule(bot) {
       }
 
       const now = new Date();
-
       const username = ctx.from.username
         ? `@${ctx.from.username}`
         : `<a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a>`;
@@ -165,32 +133,20 @@ export default function applyModule(bot) {
 ⏰ ${now.toLocaleTimeString("uz-UZ")}`;
 
       try {
-
         let sentMessage;
-
-        // TEXT
         if (ctx.message.text) {
-
           sentMessage = await ctx.telegram.sendMessage(
             user.district.groupId,
             `${header}\n\n📝 ${ctx.message.text}`,
             { parse_mode: "HTML" }
           );
-
         }
-
-        // PHOTO
         if (ctx.message.photo) {
-
           sentMessage = await ctx.telegram.sendPhoto(
             user.district.groupId,
             ctx.message.photo.pop().file_id,
-            {
-              caption: header,
-              parse_mode: "HTML"
-            }
+            { caption: header, parse_mode: "HTML" }
           );
-
         }
 
         if (!sentMessage) return;
@@ -208,65 +164,43 @@ export default function applyModule(bot) {
         );
 
       } catch (err) {
-
         console.log("❌ Guruhga yuborishda xato:", err.message);
-
         await ctx.reply(
           "❌ Xabar yuborilmadi.\nBot guruhda admin ekanini tekshiring."
         );
-
       }
 
       return;
-
     }
 
-
     // ================= GROUP JAVOB =================
-
     if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {
-
       if (!ctx.message.reply_to_message) return;
 
       const replyId = ctx.message.reply_to_message.message_id;
-
       const users = await readUsers();
       const user = users.find(u => u.lastMessageId === replyId);
-
       if (!user) return;
 
       try {
-
         if (ctx.message.text) {
-
           await ctx.telegram.sendMessage(
             user.id,
             "📨 <b>Admin javobi:</b>\n\n" + ctx.message.text,
             { parse_mode: "HTML" }
           );
-
         }
-
         if (ctx.message.photo) {
-
           await ctx.telegram.sendPhoto(
             user.id,
             ctx.message.photo.pop().file_id,
-            {
-              caption: "📨 Admin yuborgan rasm"
-            }
+            { caption: "📨 Admin yuborgan rasm" }
           );
-
         }
-
       } catch (err) {
-
         console.log("❌ Userga yuborishda xato:", err.message);
-
       }
-
     }
-
   });
 
 }

@@ -19,7 +19,7 @@ export function handleDistrict(bot) {
         return ctx.reply("❌ Tuman topilmadi.");
       }
 
-      // USERGA TANLANGAN TUMAN SAQLANADI
+      // Foydalanuvchining tanlangan tumani saqlanadi, ammo murojaat hali aktiv emas
       await saveUser(ctx.from.id, {
         district: district,
         active: false
@@ -41,8 +41,10 @@ export function handleDistrict(bot) {
         });
       }
 
+      text += `✍️ Murojaat yuborish uchun pastdagi tugmani bosing`;
+
       const keyboard = Markup.inlineKeyboard([
-        [Markup.button.callback("📩 Murojaat yuborish", `APPLY_${districtName}`)],
+        [Markup.button.callback("📩 Murojaat yuborish", "START_REQUEST")],
         [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")]
       ]);
 
