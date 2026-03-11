@@ -1,34 +1,45 @@
 import { Markup } from "telegraf";
 import { DISTRICTS } from "../config.js";
 import fs from "fs-extra";
+import { saveUser } from "./storage.js";
 
 export function handleDistrict(bot) {
 
-  // 📍 Tuman bosilganda
+  // =============================
+  // TUMAN TANLANGANDA
+  // =============================
   bot.action(/DISTRICT_(.+)/, async (ctx) => {
     try {
+      await ctx.answerCbQuery();
+
       const districtName = ctx.match[1];
       const district = DISTRICTS.find(d => d.name === districtName);
-      if (!district) return;
 
-      await ctx.answerCbQuery();
+      if (!district) {
+        return ctx.reply("❌ Tuman topilmadi.");
+      }
+
+      // USERGA TANLANGAN TUMAN SAQLANADI
+      await saveUser(ctx.from.id, {
+        district: district,
+        active: false
+      });
 
       const employeesData = await fs.readJson("./data/employees.json");
       const hodimlar = employeesData[districtName] || [];
 
-      if (!hodimlar.length) {
-        await ctx.reply("❌ Bu tuman uchun hodimlar mavjud emas.");
-        return;
-      }
-
       let text = `📍 <b>${districtName} tuman hodimlari</b>\n\n`;
 
-      hodimlar.forEach((h) => {
-        text += `┌────────────────────\n`;
-        text += `👤 <b>${h.ism} ${h.familiya}</b>\n`;
-        text += `📞 <a href="tel:${h.tel}">${h.tel}</a>\n`;
-        text += `└────────────────────\n\n`;
-      });
+      if (!hodimlar.length) {
+        text += "❌ Bu tuman uchun hodimlar mavjud emas.\n\n";
+      } else {
+        hodimlar.forEach((h) => {
+          text += `┌────────────────────\n`;
+          text += `👤 <b>${h.ism} ${h.familiya}</b>\n`;
+          text += `📞 <a href="tel:${h.tel}">${h.tel}</a>\n`;
+          text += `└────────────────────\n\n`;
+        });
+      }
 
       const keyboard = Markup.inlineKeyboard([
         [Markup.button.callback("📩 Murojaat yuborish", `APPLY_${districtName}`)],
@@ -37,16 +48,17 @@ export function handleDistrict(bot) {
 
       await ctx.editMessageText(text, {
         parse_mode: "HTML",
-        reply_markup: keyboard.reply_markup
+        reply_markup: keyboard
       });
 
     } catch (err) {
-      console.error("Xatolik /district callbackda:", err);
+      console.error("❌ district callback xatosi:", err);
     }
   });
 
-
-  // ⬅️ Orqaga bosilganda Tuman menyusiga qaytish
+  // =============================
+  // ORQAGA BOSILGANDA
+  // =============================
   bot.action("BACK_TO_DISTRICTS", async (ctx) => {
     try {
       await ctx.answerCbQuery();
@@ -55,15 +67,15 @@ export function handleDistrict(bot) {
         Markup.button.callback(d.name, `DISTRICT_${d.name}`)
       );
 
-      const keyboard = Markup.inlineKeyboard(buttons, { columns: 4 });
+      const keyboard = Markup.inlineKeyboard(buttons, { columns: 3 });
 
       await ctx.editMessageText(
         "📍 Hududingizni tanlang:",
-        keyboard
+        { reply_markup: keyboard }
       );
 
     } catch (err) {
-      console.error("Orqaga tugmasida xatolik:", err);
+      console.error("❌ BACK_TO_DISTRICTS xatosi:", err);
     }
   });
 
