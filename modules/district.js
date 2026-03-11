@@ -19,7 +19,7 @@ export function handleDistrict(bot) {
         return ctx.reply("❌ Tuman topilmadi.");
       }
 
-      // Foydalanuvchining tanlangan tumani saqlanadi, ammo murojaat hali aktiv emas
+      // USER TANLAGAN TUMANNI SAQLAYDI, active: false
       await saveUser(ctx.from.id, {
         district: district,
         active: false
@@ -43,8 +43,9 @@ export function handleDistrict(bot) {
 
       text += `✍️ Murojaat yuborish uchun pastdagi tugmani bosing`;
 
+      // ✅ Inline tugmaga aynan tanlangan tumanni callback ma’lumot sifatida beramiz
       const keyboard = Markup.inlineKeyboard([
-        [Markup.button.callback("📩 Murojaat yuborish", "START_REQUEST")],
+        [Markup.button.callback("📩 Murojaat yuborish", `START_REQUEST_${districtName}`)],
         [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")]
       ]);
 
@@ -56,6 +57,25 @@ export function handleDistrict(bot) {
     } catch (err) {
       console.error("❌ district callback xatosi:", err);
     }
+  });
+
+  // =============================
+  // Murojaatni boshlash tugmasi
+  // =============================
+  bot.action(/START_REQUEST_(.+)/, async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const districtName = ctx.match[1];
+    const district = DISTRICTS.find(d => d.name === districtName);
+    if (!district) return ctx.reply("❌ Hudud topilmadi");
+
+    // Foydalanuvchi aynan shu tumanga murojaat qilmoqda
+    await saveUser(ctx.from.id, {
+      active: true,
+      district: district
+    });
+
+    await ctx.reply("✍️ Murojaatingizni yozing:");
   });
 
   // =============================
