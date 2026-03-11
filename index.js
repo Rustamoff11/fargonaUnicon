@@ -2,122 +2,42 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Telegraf } from "telegraf";
-
 import { handleStart } from "./modules/start.js";
 import { handleDistrict } from "./modules/district.js";
 import applyModule from "./modules/apply.js";
 import { handleAdmin } from "./modules/admin.js";
 
-// =============================
-// TOKEN TEKSHIRISH
-// =============================
-
-const token = process.env.BOT_TOKEN;
-
-if (!token) {
-console.error("❌ BOT_TOKEN topilmadi (.env faylni tekshiring)");
-process.exit(1);
-}
+// TOKENNI bevosita .env dan olamiz
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 // =============================
-// BOT YARATISH
+// ID KO‘RISH
 // =============================
-
-const bot = new Telegraf(token);
-
-// =============================
-// LOGGER (debug uchun)
-// =============================
-
-bot.use(async (ctx, next) => {
-try {
-await next();
-} catch (err) {
-console.error("❌ Bot xatosi:", err);
-}
-});
-
-// =============================
-// CHAT ID KO‘RISH
-// =============================
-
 bot.command("id", async (ctx) => {
-
-const text =
-`📌 Chat turi: ${ctx.chat.type}
-🆔 Chat ID: ${ctx.chat.id}
-👤 Sizning ID: ${ctx.from.id}`;
-
-await ctx.reply(text);
-
+  await ctx.reply(
+    `📌 Chat turi: ${ctx.chat.type}\n🆔 Chat ID: ${ctx.chat.id}\n👤 Sizning ID: ${ctx.from.id}`
+  );
 });
 
 // =============================
-// MODULLARNI ULASH
+// MODULLAR
 // =============================
-
 handleStart(bot);
-handleDistrict(bot);
 applyModule(bot);
 handleAdmin(bot);
+handleDistrict(bot);
 
 // =============================
 // BOTNI ISHGA TUSHIRISH
 // =============================
-
-async function startBot() {
-
-try {
-
-```
-await bot.launch();
-
-console.log("🤖 Bot muvaffaqiyatli ishga tushdi");
-console.log("👮 Adminlar:", process.env.ADMIN_IDS || "yo‘q");
-```
-
-} catch (err) {
-
-```
-console.error("❌ Bot ishga tushmadi:", err);
-```
-
-}
-
-}
-
-startBot();
-
-// =============================
-// GLOBAL XATOLIK
-// =============================
-
-process.on("unhandledRejection", (err) => {
-console.error("❌ Unhandled Rejection:", err);
+bot.launch().then(() => {
+  console.log("Bot ishga tushdi ✅");
+  console.log("ADMIN_IDS:", process.env.ADMIN_IDS);
 });
 
-process.on("uncaughtException", (err) => {
-console.error("❌ Uncaught Exception:", err);
-});
-
-// =============================
-// GRACEFUL STOP
-// =============================
-
-process.once("SIGINT", () => {
-console.log("⛔ Bot to‘xtatildi (SIGINT)");
-bot.stop("SIGINT");
-});
-
-process.once("SIGTERM", () => {
-console.log("⛔ Bot to‘xtatildi (SIGTERM)");
-bot.stop("SIGTERM");
-});
-
-// =============================
-// BOT HOLATI
-// =============================
-
+// Graceful stop
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
 setInterval(() => {
-console.log("⚡ Bot ishlayapti...");
+  console.log("Bot ishlayapti...");
 }, 60000);

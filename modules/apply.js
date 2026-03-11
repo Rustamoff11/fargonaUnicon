@@ -4,10 +4,7 @@ import path from "path";
 import { saveUser, getUser, readUsers } from "./storage.js";
 import { DISTRICTS } from "../config.js";
 
-// =============================
 // employees.json o‘qish
-// =============================
-
 const employeesPath = path.resolve("data/employees.json");
 let employees = {};
 
@@ -17,6 +14,7 @@ try {
 } catch (err) {
   console.log("❌ employees.json topilmadi");
 }
+
 
 // =============================
 // managers.json o‘qish
@@ -32,6 +30,7 @@ try {
   console.log("❌ managers.json topilmadi");
 }
 
+
 export default function applyModule(bot) {
 
   // =============================
@@ -43,8 +42,8 @@ export default function applyModule(bot) {
     await ctx.answerCbQuery();
 
     const districtName = ctx.match[1];
-    const district = DISTRICTS.find(d => d.name === districtName);
 
+    const district = DISTRICTS.find(d => d.name === districtName);
     if (!district) return ctx.reply("❌ Hudud topilmadi");
 
     const districtEmployees = employees[districtName] || [];
@@ -55,7 +54,9 @@ export default function applyModule(bot) {
     text += `━━━━━━━━━━━━━━\n\n`;
 
     if (districtEmployees.length === 0) {
+
       text += "❌ Hodimlar topilmadi\n";
+
     } else {
 
       districtEmployees.forEach(emp => {
@@ -70,10 +71,9 @@ export default function applyModule(bot) {
     text += `━━━━━━━━━━━━━━\n`;
     text += `✍️ Murojaat yuborish uchun tugmani bosing`;
 
-    // TANLANGAN TUMAN SAQLANADI
     await saveUser(ctx.from.id, {
-      district: district,
-      active: false
+      active: false,
+      district: district
     });
 
     await ctx.reply(
@@ -88,6 +88,7 @@ export default function applyModule(bot) {
 
   });
 
+
   // =============================
   // MUROJAAT BOSHLASH
   // =============================
@@ -96,20 +97,14 @@ export default function applyModule(bot) {
 
     await ctx.answerCbQuery();
 
-    const user = await getUser(ctx.from.id);
-
-    if (!user || !user.district) {
-      return ctx.reply("❌ Avval hudud tanlang.");
-    }
-
     await saveUser(ctx.from.id, {
-      active: true,
-      district: user.district
+      active: true
     });
 
     await ctx.reply("✍️ Murojaatingizni yozing:");
 
   });
+
 
   // =============================
   // SUHBATNI TUGATISH
@@ -129,6 +124,7 @@ export default function applyModule(bot) {
 
   });
 
+
   // =============================
   // USER MESSAGE
   // =============================
@@ -142,7 +138,6 @@ export default function applyModule(bot) {
     if (ctx.chat.type === "private") {
 
       const user = await getUser(ctx.from.id);
-
       if (!user || !user.active) return;
 
       if (!user.district || !user.district.groupId) {
@@ -151,15 +146,6 @@ export default function applyModule(bot) {
       }
 
       const now = new Date();
-
-      // TOSHKENT VAQTI
-      const date = now.toLocaleDateString("uz-UZ", {
-        timeZone: "Asia/Tashkent"
-      });
-
-      const time = now.toLocaleTimeString("uz-UZ", {
-        timeZone: "Asia/Tashkent"
-      });
 
       const username = ctx.from.username
         ? `@${ctx.from.username}`
@@ -175,8 +161,8 @@ export default function applyModule(bot) {
 
 👨‍💼 Mas'ul hodim: ${manager}
 
-📅 ${date}
-⏰ ${time}`;
+📅 ${now.toLocaleDateString("uz-UZ")}
+⏰ ${now.toLocaleTimeString("uz-UZ")}`;
 
       try {
 
@@ -234,6 +220,7 @@ export default function applyModule(bot) {
       return;
 
     }
+
 
     // ================= GROUP JAVOB =================
 
