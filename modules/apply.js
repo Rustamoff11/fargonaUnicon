@@ -27,24 +27,7 @@ try {
 export default function applyModule(bot) {
 
   // =============================
-  // "Murojaat yuborish" tugmasi bosilganda ishlaydigan handler
-  // =============================
-  bot.action("START_REQUEST", async (ctx) => {
-    await ctx.answerCbQuery();
-
-    // Foydalanuvchini aktiv holatga o'tkazamiz
-    const user = await getUser(ctx.from.id);
-    if (!user || !user.district) {
-      return ctx.reply("❌ Iltimos, avval tumanni tanlang.");
-    }
-
-    await saveUser(ctx.from.id, { active: true });
-
-    await ctx.reply("✍️ Murojaatingizni yozing:");
-  });
-
-  // =============================
-  // Tuman tanlash (hodimlar ro‘yxati chiqarish)
+  // Tuman tanlash (hodimlar ro‘yxati)
   // =============================
   bot.action(/APPLY_(.+)/, async (ctx) => {
     await ctx.answerCbQuery();
@@ -57,8 +40,7 @@ export default function applyModule(bot) {
     const manager = managers[districtName] || "@user";
 
     let text = `🏢 <b>${districtName} tumani hodimlari</b>\n\n`;
-    text += `👨‍💼 Mas'ul hodim: ${manager}\n\n`;
-    text += `━━━━━━━━━━━━━━\n\n`;
+    text += `👨‍💼 Mas'ul hodim: ${manager}\n\n━━━━━━━━━━━━━━\n\n`;
 
     if (!districtEmployees.length) {
       text += "❌ Hodimlar topilmadi\n";
@@ -69,34 +51,72 @@ export default function applyModule(bot) {
       });
     }
 
-    text += `━━━━━━━━━━━━━━\n`;
-    text += `✍️ Murojaat yuborish uchun tugmani bosing`;
+    text += "━━━━━━━━━━━━━━\n✍️ Murojaat yuborish uchun tugmani bosing";
 
-    // Foydalanuvchining tanlangan tumani saqlanadi, ammo murojaat yuborilmaydi
     await saveUser(ctx.from.id, { district: district, active: false });
 
-    await ctx.reply(
-      text,
-      {
-        parse_mode: "HTML",
-        ...Markup.inlineKeyboard([
-          [Markup.button.callback("✍️ Murojaat yuborish", "START_REQUEST")]
-        ])
-      }
-    );
+    const keyboard = Markup.inlineKeyboard([
+      [Markup.button.callback("✍️ Murojaat yuborish", `START_REQUEST_${districtName}`)],
+      [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")],
+      [Markup.button.callback("❌ Close", "CLOSE_PANEL")]
+    ]);
+
+    await ctx.reply(text, { parse_mode: "HTML", reply_markup: keyboard });
   });
 
   // =============================
-  // Suhbatni yakunlash
+  // Murojaat boshlash
+  // =============================
+  bot.action(/START_REQUEST_(.+)/, async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const districtName = ctx.match[1];
+    const district = DISTRICTS.find(d => d.name === districtName);
+    if (!district) return ctx.reply("❌ Hudud topilmadi");
+
+    await saveUser(ctx.from.id, { active: true, district: district });
+
+    const now = new Date();
+    const formattedTime = now.toLocaleString("uz-UZ", { hour12: false });
+
+    const keyboard = Markup.inlineKeyboard([
+      [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")],
+      [Markup.button.callback("❌ Close", "CLOSE_PANEL")]
+    ]);
+
+    await ctx.reply(`✍️ Murojaatingizni yozing:\n⏰ Vaqt: ${formattedTime}`, { reply_markup: keyboard });
+  });
+
+  // =============================
+  // Suhbatni tugatish
   // =============================
   bot.action("END_CHAT", async (ctx) => {
     await ctx.answerCbQuery();
-
     await saveUser(ctx.from.id, { active: false });
-
     await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
-
     await ctx.reply("🔚 Suhbat tugatildi.\n/start bilan qayta boshlang.");
+  });
+
+  // =============================
+  // Close panel
+  // =============================
+  bot.action("CLOSE_PANEL", async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.deleteMessage();
+  });
+
+  // =============================
+  // Back to districts
+  // =============================
+  bot.action("BACK_TO_DISTRICTS", async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const buttons = DISTRICTS.map(d =>
+      Markup.button.callback(d.name, `DISTRICT_${d.name}`)
+    );
+    const keyboard = Markup.inlineKeyboard(buttons, { columns: 3 });
+
+    await ctx.editMessageText("📍 Hududingizni tanlang:", { reply_markup: keyboard });
   });
 
   // =============================
@@ -107,7 +127,7 @@ export default function applyModule(bot) {
 
     if (ctx.chat.type === "private") {
       const user = await getUser(ctx.from.id);
-      if (!user || !user.active) return; // faqat active foydalanuvchi murojaat yuboradi
+      if (!user || !user.active) return;
 
       if (!user.district || !user.district.groupId) {
         console.log("❌ groupId topilmadi");
@@ -118,7 +138,6 @@ export default function applyModule(bot) {
       const username = ctx.from.username
         ? `@${ctx.from.username}`
         : `<a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a>`;
-
       const manager = managers[user.district.name] || "@user";
 
       const header = `📩 <b>YANGI MUROJAAT</b>
@@ -162,12 +181,9 @@ export default function applyModule(bot) {
             [Markup.button.callback("🛑 Suhbatni tugatish", "END_CHAT")]
           ])
         );
-
       } catch (err) {
         console.log("❌ Guruhga yuborishda xato:", err.message);
-        await ctx.reply(
-          "❌ Xabar yuborilmadi.\nBot guruhda admin ekanini tekshiring."
-        );
+        await ctx.reply("❌ Xabar yuborilmadi.\nBot guruhda admin ekanini tekshiring.");
       }
 
       return;

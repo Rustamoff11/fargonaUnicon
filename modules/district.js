@@ -40,10 +40,11 @@ export function handleDistrict(bot) {
 
       text += `✍️ Murojaat yuborish uchun pastdagi tugmani bosing`;
 
-      // ✅ Tugmaga aynan shu tuman callback sifatida beriladi
+      // ✅ Inline tugmalar: murojaat boshlash va orqaga
       const keyboard = Markup.inlineKeyboard([
         [Markup.button.callback("📩 Murojaat yuborish", `START_REQUEST_${districtName}`)],
-        [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")]
+        [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")],
+        [Markup.button.callback("❌ Close", "CLOSE_PANEL")]
       ]);
 
       await ctx.editMessageText(text, { parse_mode: "HTML", reply_markup: keyboard });
@@ -67,7 +68,16 @@ export function handleDistrict(bot) {
       // Foydalanuvchi aynan shu tumanga murojaat qilmoqda
       await saveUser(ctx.from.id, { active: true, district: district });
 
-      await ctx.reply("✍️ Murojaatingizni yozing:");
+      const now = new Date();
+      const formattedTime = now.toLocaleString("uz-UZ", { hour12: false });
+
+      await ctx.reply(
+        `✍️ Murojaatingizni yozing:\n⏰ Vaqt: ${formattedTime}`,
+        Markup.inlineKeyboard([
+          [Markup.button.callback("⬅️ Orqaga", "BACK_TO_DISTRICTS")],
+          [Markup.button.callback("❌ Close", "CLOSE_PANEL")]
+        ])
+      );
 
     } catch (err) {
       console.error("❌ START_REQUEST callback xatosi:", err);
@@ -91,6 +101,18 @@ export function handleDistrict(bot) {
 
     } catch (err) {
       console.error("❌ BACK_TO_DISTRICTS xatosi:", err);
+    }
+  });
+
+  // =============================
+  // CLOSE PANEL
+  // =============================
+  bot.action("CLOSE_PANEL", async (ctx) => {
+    try {
+      await ctx.answerCbQuery();
+      await ctx.deleteMessage(); // Panelni yopadi
+    } catch (err) {
+      console.error("❌ CLOSE_PANEL xatosi:", err);
     }
   });
 
